@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="xuejian.sun" />
+
+
+
+<meta name="description" content="logback是当下最受欢迎的log记录工具，高性能，功能全，文档全，作者是log4j的作者，本文从logback常用的组件和功能点进行介绍，并提供了简单的例子参考，logback官网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="logback的快速应用">
+<meta property="og:url" content="xjsuntop.com/2018/10/14/logback/index.html">
+<meta property="og:site_name" content="blog">
+<meta property="og:description" content="logback是当下最受欢迎的log记录工具，高性能，功能全，文档全，作者是log4j的作者，本文从logback常用的组件和功能点进行介绍，并提供了简单的例子参考，logback官网">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="/image/appender.jpg">
+<meta property="og:image" content="/image/log.jpg">
+<meta property="og:updated_time" content="2018-10-14T05:48:33.581Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="logback的快速应用">
+<meta name="twitter:description" content="logback是当下最受欢迎的log记录工具，高性能，功能全，文档全，作者是log4j的作者，本文从logback常用的组件和功能点进行介绍，并提供了简单的例子参考，logback官网">
+<meta name="twitter:image" content="/image/appender.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>logback的快速应用 | blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/java.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">xuejian.sun</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">一条路走到黑</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:sxjjio@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/sunxuejian" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于后端开发</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">xuejian.sun</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/java.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">xuejian.sun</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">一条路走到黑</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:sxjjio@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/sunxuejian" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-logback" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/10/14/logback/" class="article-date">
+      <time datetime="2018-10-14T03:39:48.000Z" itemprop="datePublished">2018-10-14</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      logback的快速应用
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>logback是当下最受欢迎的log记录工具，高性能，功能全，文档全，作者是log4j的作者，<br>本文从logback常用的组件和功能点进行介绍，并提供了简单的例子参考，<a href="https://logback.qos.ch/" target="_blank" rel="noopener">logback官网</a></p>
+<a id="more"></a>
+<h2 id="java中如何使用logback"><a href="#java中如何使用logback" class="headerlink" title="java中如何使用logback"></a>java中如何使用logback</h2><blockquote>
+<p>在pom中引入关键的两个包</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">       <span class="comment">&lt;!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>ch.qos.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logback-classic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后在resources目录下创建一个logback.xml就可以了,请参考[<em>logback.xml详细的例子</em>]这个章节</p>
+<h2 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h2><blockquote>
+<p>推荐使用以下几种,级别从高到低排列</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ERROR</td>
+<td>错误事件可能仍然允许应用程序继续运行</td>
+</tr>
+<tr>
+<td>WARN</td>
+<td>指定具有潜在危害的情况</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>指定能够突出在粗粒度级别的应用程序运行情况的信息的消息</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td>指定细粒度信息事件是最有用的应用程序调试</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="Appender级别"><a href="#Appender级别" class="headerlink" title="Appender级别"></a>Appender级别</h2><blockquote>
+<p><a href="https://logback.qos.ch/manual/appenders.html" target="_blank" rel="noopener">What is an Appender?</a></p>
+</blockquote>
+<center> Appender class dependency </center>
+
+<p><img src="/image/appender.jpg" alt="appender"></p>
+<h3 id="ConsoleAppender-将日志输出到控制台"><a href="#ConsoleAppender-将日志输出到控制台" class="headerlink" title="ConsoleAppender (将日志输出到控制台)"></a><strong><font color="red" size="5">ConsoleAppender</font></strong> (将日志输出到控制台)</h3><blockquote>
+<p>将日志信息打印在控制台中</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>encoder</td>
+<td><a href="https://logback.qos.ch/xref/ch/qos/logback/core/encoder/Encoder.html" target="_blank" rel="noopener">Encoder</a></td>
+<td>日志输出格式</td>
+</tr>
+<tr>
+<td>target</td>
+<td>String</td>
+<td>日志输出目标，可以是System.out或者System.err，默认是System.out</td>
+</tr>
+<tr>
+<td>withJansi</td>
+<td>boolean</td>
+<td>默认是false，这个使用不到，好像是开启后输出的ANSI会有颜色，具体看官网介绍</td>
+</tr>
+</tbody>
+</table>
+<p><strong><font color="red">sample</font></strong>:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"STDOUT"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- encoders are assigned the type</span></span><br><span class="line"><span class="comment">         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%-4relative [%thread] %-5level %logger&#123;35&#125; - %msg %n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"DEBUG"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"STDOUT"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="FileAppender-将日志输出到文件中"><a href="#FileAppender-将日志输出到文件中" class="headerlink" title="FileAppender(将日志输出到文件中)"></a><strong><font color="red" size="5">FileAppender</font></strong>(将日志输出到文件中)</h3><blockquote>
+<p>FileAppender OutputStreamAppender的子类,将日志输出到指定文件中。如果文件已经存在,根据配置属性来判断在末尾追加或者重新生成文件</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>append</td>
+<td>boolean</td>
+<td>默认为true,会将日志追加到现有文件末尾</td>
+</tr>
+<tr>
+<td>encoder</td>
+<td><a href="https://logback.qos.ch/xref/ch/qos/logback/core/encoder/Encoder.html" target="_blank" rel="noopener">Encoder</a></td>
+<td>日志输出格式</td>
+</tr>
+<tr>
+<td>file</td>
+<td>String</td>
+<td>文件名，可以带路径，如不过文件或目录不存在则会创建，例如: logs/info.log,该属性没有默认值</td>
+</tr>
+<tr>
+<td>immediateFlush</td>
+<td>boolean</td>
+<td>一旦有日志产生立即刷新到文件，通过情况下把它设为false，以提高性能，因为会频繁的flush buffer;</td>
+</tr>
+</tbody>
+</table>
+<p><strong><font color="red">sample</font></strong>:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 使用时间戳作为文件名 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">timestamp</span> <span class="attr">key</span>=<span class="string">"bySecond"</span> <span class="attr">datePattern</span>=<span class="string">"yyyyMMdd'T'HHmmss"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"FILE"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.FileAppender"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">file</span>&gt;</span>testFile-$&#123;bySecond&#125;.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">append</span>&gt;</span>true<span class="tag">&lt;/<span class="name">append</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- set immediateFlush to false for much higher logging throughput --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">immediateFlush</span>&gt;</span>true<span class="tag">&lt;/<span class="name">immediateFlush</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- encoders are assigned the type</span></span><br><span class="line"><span class="comment">         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%-4relative [%thread] %-5level %logger&#123;35&#125; - %msg%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"DEBUG"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"FILE"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="RollingFileAppender-滚动式输出"><a href="#RollingFileAppender-滚动式输出" class="headerlink" title="RollingFileAppender(滚动式输出)"></a><strong><font color="red" size="5">RollingFileAppender</font></strong>(滚动式输出)</h3><blockquote>
+<p><a href="https://logback.qos.ch/xref/ch/qos/logback/core/rolling/RollingFileAppender.html" target="_blank" rel="noopener">RollingFileAppender</a>继承于FileAppender, 按照一些特定策略生成滚动文件，例如与TimeBasedRollingPolicy策略搭配时，当文件到达指定时间，会重新生成一个新的文件，关于策略，后面章节会有具体详细介绍。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>append</td>
+<td>boolean</td>
+<td>看FileAppender配置</td>
+</tr>
+<tr>
+<td>encoder</td>
+<td><a href="https://logback.qos.ch/xref/ch/qos/logback/core/encoder/Encoder.html" target="_blank" rel="noopener">Encoder</a></td>
+<td>看FileAppender配置</td>
+</tr>
+<tr>
+<td>file</td>
+<td>String</td>
+<td>看FileAppender配置</td>
+</tr>
+<tr>
+<td>rollingPolicy</td>
+<td>RollingPolicy</td>
+<td>日志滚动策略：配置这个选项会让日志文件按照指定策略进行滚动</td>
+</tr>
+<tr>
+<td>triggeringPolicy</td>
+<td>TriggeringPolicy</td>
+<td>触发滚动策略：通常搭配rollingPolicy一起使用，用于设置滚动的触发条件</td>
+</tr>
+</tbody>
+</table>
+<p><strong><font color="red">sample</font></strong>:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"errorAppender"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.RollingFileAppender"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">file</span>&gt;</span>logs/error.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 设置滚动策略 TimeBasedRollingPolicy 按日期滚动 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--设置日志命名模式--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>errorFile.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--最多保留30天log--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>30<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 超过150MB时，立即触发滚动策略，生成新的文件 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">triggeringPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maxFileSize</span>&gt;</span>150<span class="tag">&lt;/<span class="name">maxFileSize</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">triggeringPolicy</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%d [%p] %-5level %logger - %msg%newline<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="日志文件策略-Policy-常用"><a href="#日志文件策略-Policy-常用" class="headerlink" title="日志文件策略 *Policy(常用)"></a>日志文件策略 *Policy(常用)</h2><h3 id="TimeBasedRollingPolicy-按日期滚动策略"><a href="#TimeBasedRollingPolicy-按日期滚动策略" class="headerlink" title="TimeBasedRollingPolicy(按日期滚动策略)"></a><strong><font color="red" size="5">TimeBasedRollingPolicy</font></strong>(按日期滚动策略)</h3><blockquote>
+<p><a href="https://logback.qos.ch/xref/ch/qos/logback/core/rolling/TimeBasedRollingPolicy.html" target="_blank" rel="noopener">TimeBasedRollingPolicy</a> 可能是logback最受欢迎的滚动策略，基于时间的滚动，可以是一天也可以是一个月，这个较为常用，通常我们可以设置一天生成一个新的文件，很好归纳，统计</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fileNamePattern</td>
+<td>String</td>
+<td>log文件命名规则，通常使用%d来按天或按月输出，例如errorFile.%d{yyyy-MM-dd}.log，生成出来的文件类似于errorFile.2018-10-09.log，带上日期后这样每天生成的文件就不会名字重复了，这个还支持选择时区，例如%d{yyyy-MM-dd,UTC}</td>
+</tr>
+<tr>
+<td>maxHistory</td>
+<td>int</td>
+<td>日志保留天数，超过该天数的历史日志文件将会被logback<font color="red">异步删除</font></td>
+</tr>
+<tr>
+<td>totalSizeCap</td>
+<td>int</td>
+<td>归档文件的总大小，优先应用maxHistory的策略。</td>
+</tr>
+<tr>
+<td>cleanHistoryOnStart</td>
+<td>boolean</td>
+<td>默认为false,触发归档文件立即删除的动作。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><em>滚动输出支持自动压缩</em>,文件名以.gz或者.zip结尾即可，例如：/wombat/foo.%d.gz</p>
+</blockquote>
+<p><strong><font color="red">sample</font></strong>:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"FILE"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">file</span>&gt;</span>logFile.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- daily rollover --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>logFile.%d&#123;yyyy-MM-dd&#125;.log<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">&lt;!-- keep 30 days' worth of history capped at 3GB total size --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>30<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">totalSizeCap</span>&gt;</span>3GB<span class="tag">&lt;/<span class="name">totalSizeCap</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%-4relative [%thread] %-5level %logger&#123;35&#125; - %msg%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"DEBUG"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"FILE"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="SizeAndTimeBasedRollingPolicy-按大小和时间滚动策略"><a href="#SizeAndTimeBasedRollingPolicy-按大小和时间滚动策略" class="headerlink" title="SizeAndTimeBasedRollingPolicy(按大小和时间滚动策略)"></a><strong><font color="red" size="5">SizeAndTimeBasedRollingPolicy</font></strong>(按大小和时间滚动策略)</h3><blockquote>
+<p>这个应该是最常用的吧，按照指定时间和文件大小的策略来滚动日志。废话不多说看下面的例子</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"ROLLING"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">file</span>&gt;</span>mylog.txt<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- rollover daily --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>mylog-%d&#123;yyyy-MM-dd&#125;.%i.txt<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">maxFileSize</span>&gt;</span>100MB<span class="tag">&lt;/<span class="name">maxFileSize</span>&gt;</span>    </span><br><span class="line">       <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">totalSizeCap</span>&gt;</span>20GB<span class="tag">&lt;/<span class="name">totalSizeCap</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%msg%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"DEBUG"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"ROLLING"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>请注意除“％d”之外的“％i”转换标记。 ％i和％d令牌都是强制性的。 每当当前日志文件在当前时间段结束之前达到maxFileSize时，它将以增加的索引存档，从0开始</p>
+</blockquote>
+<hr>
+<h3 id="FixedWindowRollingPolicy-以固定的算法策略生成滚动文件-不常用"><a href="#FixedWindowRollingPolicy-以固定的算法策略生成滚动文件-不常用" class="headerlink" title="FixedWindowRollingPolicy(以固定的算法策略生成滚动文件 不常用)"></a><strong><font color="red" size="5">FixedWindowRollingPolicy</font></strong>(以固定的算法策略生成滚动文件 不常用)</h3><blockquote>
+<p>这个策略不常用，咱就不多bb了,属性和其他滚动策略是一样的，通常文件命名规范是这样的：tests.%i.log，当到达条件触发滚动时会生成文件test1.log,test2.log,test3.log …</p>
+</blockquote>
+<hr>
+<h3 id="SizeBasedTriggeringPolicy-根据大小触发滚动的策略"><a href="#SizeBasedTriggeringPolicy-根据大小触发滚动的策略" class="headerlink" title="SizeBasedTriggeringPolicy(根据大小触发滚动的策略)"></a><strong><font color="red" size="5">SizeBasedTriggeringPolicy</font></strong>(根据大小触发滚动的策略)</h3><blockquote>
+<p>这个<triggeringpolicy>标签里的配置，用来触发滚动时间的，例如文件大小到了指定值，就是触发滚动</triggeringpolicy></p>
+</blockquote>
+<p><strong><font color="red">sample</font></strong>:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"FILE"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">file</span>&gt;</span>test.log<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.FixedWindowRollingPolicy"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>test.%i.log.zip<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">minIndex</span>&gt;</span>1<span class="tag">&lt;/<span class="name">minIndex</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">maxIndex</span>&gt;</span>3<span class="tag">&lt;/<span class="name">maxIndex</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">triggeringPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">maxFileSize</span>&gt;</span>5MB<span class="tag">&lt;/<span class="name">maxFileSize</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">triggeringPolicy</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%-4relative [%thread] %-5level %logger&#123;35&#125; - %msg%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"DEBUG"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"FILE"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="fileNamePatten的一些规则-例子，按年，月，日，天，时，分，秒滚动"><a href="#fileNamePatten的一些规则-例子，按年，月，日，天，时，分，秒滚动" class="headerlink" title="fileNamePatten的一些规则(例子，按年，月，日，天，时，分，秒滚动)"></a>fileNamePatten的一些规则(例子，按年，月，日，天，时，分，秒滚动)</h2><table>
+<thead>
+<tr>
+<th>例子</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/wombat/foo.%d</td>
+<td>按天滚动，格式 年-月-日，都生成在一个文件夹中</td>
+</tr>
+<tr>
+<td>/wombat/%d{yyyy/MM}/foo.txt</td>
+<td>按月滚动，每个月生成一个相同的文件，在不同的月份文件夹中，例如first: /wombat/2018/09/foo.txt，next: /wombat/2018/10/foo.txt</td>
+</tr>
+<tr>
+<td>/wombat/foo.%d{yyyy-ww}.log</td>
+<td>每周生成一次，每周的第一天开始重新生成</td>
+</tr>
+<tr>
+<td>/wombat/foo%d{yyyy-MM-dd_HH}.log</td>
+<td>每小时生成一次</td>
+</tr>
+<tr>
+<td>/wombat/foo%d{yyyy-MM-dd_HH-mm}.log</td>
+<td>每分钟生成一次</td>
+</tr>
+<tr>
+<td>/wombat/foo%d{yyyy-MM-dd_HH-mm, UTC}.log</td>
+<td>按指定时区每分钟生成一次</td>
+</tr>
+<tr>
+<td>/foo/%d{yyyy-MM,aux}/%d.log</td>
+<td>每天生成一次，按照年和月区分，例如，/foo/2018-09/中存在一个月的log，log名是每天的日期</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="encoder规则-日志输出格式"><a href="#encoder规则-日志输出格式" class="headerlink" title="encoder规则(日志输出格式)"></a>encoder规则(日志输出格式)</h2><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%m</td>
+<td>输出代码中指定的消息</td>
+</tr>
+<tr>
+<td>%p</td>
+<td>输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL</td>
+</tr>
+<tr>
+<td>%r</td>
+<td>输出自应用启动到输出该log信息耗费的毫秒数</td>
+</tr>
+<tr>
+<td>%c</td>
+<td>输出所属的类目，通常就是所在类的全名</td>
+</tr>
+<tr>
+<td>%t</td>
+<td>输出产生该日志事件的线程名</td>
+</tr>
+<tr>
+<td>%n</td>
+<td>输出一个回车换行符，Windows平台为“/r/n”，Unix平台为“/n”</td>
+</tr>
+<tr>
+<td>%d</td>
+<td>输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d{yyy MMM dd HH:mm:ss , SSS}，输出类似：2002年10月18日 22:10：28，921</td>
+</tr>
+<tr>
+<td>%l</td>
+<td>输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java: 10 )</td>
+</tr>
+</tbody>
+</table>
+<h3 id="配置："><a href="#配置：" class="headerlink" title="配置："></a>配置：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    　　　　　　　　　　</span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"STDOUT"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日期 [线程] [class类]-[日志级别] log内容 回车符号 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%d&#123;yyyy-MM-dd HH:mm:ss,SSS&#125; [%t] [%c]-[%p] %m%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span>　　　　　　　　　</span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">        　　　　　　　　　　</span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 输出INFO及以上的日志 --&gt;</span>　　　　　　</span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 让自定义的appender生效 --&gt;</span>　　　　　　　　　　　</span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"STDOUT"</span>/&gt;</span>　　　　　　　　　　</span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line">    　　　　　　　　</span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="控制台输出："><a href="#控制台输出：" class="headerlink" title="控制台输出："></a>控制台输出：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2018-10-09 14:27:55 [main] [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping]-[INFO] Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]</span><br><span class="line">2018-10-09 14:27:55 [main] [org.springframework.jmx.export.annotation.AnnotationMBeanExporter]-[INFO] Registering beans for JMX exposure on startup</span><br><span class="line">2018-10-09 14:27:55 [main] [org.apache.coyote.http11.Http11NioProtocol]-[INFO] Starting ProtocolHandler [&quot;http-nio-6677&quot;]</span><br><span class="line">2018-10-09 14:27:55 [main] [org.apache.tomcat.util.net.NioSelectorPool]-[INFO] Using a shared selector for servlet write/read</span><br><span class="line">2018-10-09 14:27:55 [main] [org.springframework.boot.web.embedded.tomcat.TomcatWebServer]-[INFO] Tomcat started on port(s): 6677 (http) with context path &apos;&apos;</span><br><span class="line">2018-10-09 14:27:55 [main] [com.xj.plugins.Springboot2AnalyzeApplication]-[INFO] Started Springboot2AnalyzeApplication in 2.014 seconds (JVM running for 3.949)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在控制输出的log还可以进行颜色设置，更方便查看log，区分log级别</p>
+</blockquote>
+<hr>
+<h2 id="控制台输出的log配置颜色"><a href="#控制台输出的log配置颜色" class="headerlink" title="控制台输出的log配置颜色"></a>控制台输出的log配置颜色</h2><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%black</td>
+<td>黑色</td>
+</tr>
+<tr>
+<td>%red</td>
+<td>红色</td>
+</tr>
+<tr>
+<td>%green</td>
+<td>绿色</td>
+</tr>
+<tr>
+<td>%yellow</td>
+<td>黄色</td>
+</tr>
+<tr>
+<td>%blue</td>
+<td>蓝色</td>
+</tr>
+<tr>
+<td>%magenta</td>
+<td>品红</td>
+</tr>
+<tr>
+<td>%cyan</td>
+<td>青色</td>
+</tr>
+<tr>
+<td>%white</td>
+<td>白色</td>
+</tr>
+<tr>
+<td>%gray</td>
+<td>灰色</td>
+</tr>
+<tr>
+<td>%highlight</td>
+<td>高亮色</td>
+</tr>
+<tr>
+<td>%bold</td>
+<td>更鲜艳色颜色，强化以上所有的颜色，例如%boldRed,%boldBlack</td>
+</tr>
+</tbody>
+</table>
+<h3 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    　　　　　　　　　　</span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"STDOUT"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日期 [线程] [class类]-[日志级别] log内容 回车符号 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%blue(%d&#123;yyyy-MM-dd HH:mm:ss,SSS&#125;) [%cyan(%t)] [%yellow(%c)]-[%highlight(%p)] %m%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span>　　　　　　　　　</span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">        　　　　　　　　　　</span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 输出INFO及以上的日志 --&gt;</span>　　　　　　</span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 让自定义的appender生效 --&gt;</span>　　　　　　　　　　　</span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"STDOUT"</span>/&gt;</span>　　　　　　　　　　</span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line">    　　　　　　　　</span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>配置过后的控制台输出</p>
+</blockquote>
+<p><img src="/image/log.jpg" alt="增加色彩输出"></p>
+<hr>
+<h2 id="完整的logback-xml文件"><a href="#完整的logback-xml文件" class="headerlink" title="完整的logback.xml文件"></a>完整的logback.xml文件</h2><blockquote>
+<p>该样例文件主要是配置了比较通用的三种模式</p>
+<ol>
+<li>定向输出，控制台输出，全量的日志文件</li>
+<li>将error日志输出到error.log,warn日志输出到warn.log,将全量日志输出到main.log文件中</li>
+</ol>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"LOG_HOME"</span> <span class="attr">value</span>=<span class="string">"logs"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 输出到控制台 --&gt;</span>　　</span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"STDOUT"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.ConsoleAppender"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 日期 [线程] [class类]-[日志级别] log内容 回车符号 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%blue(%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125;) %cyan(%t) %yellow(%c)-%highlight(%p) %m%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span>　　　　　　　　　</span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 所有信息输出到main.log 按天和大小滚动 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"MAIN"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%t] [%c]-[%p] %m%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- rollover daily --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;LOG_HOME&#125;/main-%d&#123;yyyy-MM-dd&#125;.%i.txt<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 文件最大30MB,保留60天，总大小20GB --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxFileSize</span>&gt;</span>30MB<span class="tag">&lt;/<span class="name">maxFileSize</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">totalSizeCap</span>&gt;</span>20GB<span class="tag">&lt;/<span class="name">totalSizeCap</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"ERROR"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%t] [%c]-[%p] %m%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- rollover daily --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;LOG_HOME&#125;/error-%d&#123;yyyy-MM-dd&#125;.%i.txt<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 文件最大30MB,保留60天，总大小20GB --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxFileSize</span>&gt;</span>30MB<span class="tag">&lt;/<span class="name">maxFileSize</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">totalSizeCap</span>&gt;</span>20GB<span class="tag">&lt;/<span class="name">totalSizeCap</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 过滤器,只写入error级别log --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">level</span>&gt;</span>ERROR<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMatch</span>&gt;</span>ACCEPT<span class="tag">&lt;/<span class="name">onMatch</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMismatch</span>&gt;</span>DENY<span class="tag">&lt;/<span class="name">onMismatch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"WARN"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- rollover daily --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;LOG_HOME&#125;/warn-%d&#123;yyyy-MM-dd&#125;.%i.txt<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 文件最大30MB,保留60天，总大小20GB --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxFileSize</span>&gt;</span>30MB<span class="tag">&lt;/<span class="name">maxFileSize</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">totalSizeCap</span>&gt;</span>20GB<span class="tag">&lt;/<span class="name">totalSizeCap</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 过滤器,只写入warn级别，log --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">level</span>&gt;</span>WARN<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMatch</span>&gt;</span>ACCEPT<span class="tag">&lt;/<span class="name">onMatch</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMismatch</span>&gt;</span>DENY<span class="tag">&lt;/<span class="name">onMismatch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%t] [%c]-[%p] %m%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 输出INFO及以上的日志 --&gt;</span>　　　　　　</span><br><span class="line">    <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 让自定义的appender生效 --&gt;</span>　　　　　　　　　　　</span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"STDOUT"</span>/&gt;</span>　　</span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"MAIN"</span>/&gt;</span>　　　　　　　　　　</span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"ERROR"</span>/&gt;</span>　　　　　　　　　　</span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"WARN"</span>/&gt;</span>　　　　　　　　　　</span><br><span class="line">    <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line">    　　　　　　　　</span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="关于日志定向输出和读取环境变量的问题"><a href="#关于日志定向输出和读取环境变量的问题" class="headerlink" title="关于日志定向输出和读取环境变量的问题"></a>关于日志定向输出和读取环境变量的问题</h2><h3 id="定向输出"><a href="#定向输出" class="headerlink" title="定向输出"></a>定向输出</h3><blockquote>
+<p>logback.xml中如何需要将某中日志输出到文件中可以使用过滤器,类似于以下这个例子</p>
+</blockquote>
+<p><font color="red"> xml配置过滤器,例如将error日志输出到error.log中</font></p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"ERROR"</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.RollingFileAppender"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">encoder</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">pattern</span>&gt;</span>%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%t] [%c]-[%p] %m%n<span class="tag">&lt;/<span class="name">pattern</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line"></span><br><span class="line">       <span class="tag">&lt;<span class="name">rollingPolicy</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"</span>&gt;</span></span><br><span class="line">           <span class="comment">&lt;!-- rollover daily --&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">fileNamePattern</span>&gt;</span>$&#123;LOG_HOME&#125;/error-%d&#123;yyyy-MM-dd&#125;.%i.txt<span class="tag">&lt;/<span class="name">fileNamePattern</span>&gt;</span></span><br><span class="line">           <span class="comment">&lt;!-- 文件最大30MB,保留60天，总大小20GB --&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">maxFileSize</span>&gt;</span>30MB<span class="tag">&lt;/<span class="name">maxFileSize</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">maxHistory</span>&gt;</span>60<span class="tag">&lt;/<span class="name">maxHistory</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">totalSizeCap</span>&gt;</span>20GB<span class="tag">&lt;/<span class="name">totalSizeCap</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">rollingPolicy</span>&gt;</span></span><br><span class="line"></span><br><span class="line">       <span class="comment">&lt;!-- 过滤器,只写入error级别log --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">level</span>&gt;</span>ERROR<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">onMatch</span>&gt;</span>ACCEPT<span class="tag">&lt;/<span class="name">onMatch</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">onMismatch</span>&gt;</span>DENY<span class="tag">&lt;/<span class="name">onMismatch</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果有需要特殊log需要定向输出的话可以重写 Filter<iloggingevent>方法</iloggingevent></p>
+</blockquote>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyLogFilter</span> <span class="keyword">extends</span> <span class="title">Filter</span>&lt;<span class="title">ILoggingEvent</span>&gt; </span>&#123;   </span><br><span class="line">        <span class="meta">@Override</span>   </span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> FilterReply <span class="title">decide</span><span class="params">(ILoggingEvent event)</span> </span>&#123;</span><br><span class="line">                   </span><br><span class="line">            <span class="keyword">if</span>(event.getMessage() != <span class="keyword">null</span></span><br><span class="line">                    &amp;&amp; (event.getMessage().startsWith(<span class="string">"test"</span>)</span><br><span class="line">                    || event.getMessage().startsWith(<span class="string">"demo"</span>))) &#123;</span><br><span class="line">                <span class="keyword">return</span> FilterReply.ACCEPT;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> FilterReply.DENY;</span><br><span class="line">            &#125;       </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>然后将filter加入到你的appender中</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 过滤器,写入test和demo开头的日志 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"xx.xxx.xxxx.MyLogFilter"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="logback-xml读取环境变量"><a href="#logback-xml读取环境变量" class="headerlink" title="logback.xml读取环境变量"></a>logback.xml读取环境变量</h3><blockquote>
+<p>logback.xml支持两种读取方式,从系统环境中读取，从spring配置文件中读取</p>
+</blockquote>
+<blockquote>
+<p>读取系统环境变量 通过${envName}方式获取</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 从系统环境变量读取日志输出目录 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"LOG_HOME"</span> <span class="attr">value</span>=<span class="string">"$&#123;log.dir&#125;"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>读取spring配置文件的方式</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 从context中读取所以不需要使用$&#123;&#125;获取 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">springProperty</span> <span class="attr">scope</span>=<span class="string">"context"</span> <span class="attr">name</span>=<span class="string">"LOG_HOME"</span> <span class="attr">source</span>=<span class="string">"logback.dir"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/10/14/logback/">logback的快速应用</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">xuejian.sun</a></p>
+        <p><span>发布时间:</span>2018-10-14, 11:39:48</p>
+        <p><span>最后更新:</span>2018-10-14, 13:48:33</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/10/14/logback/" title="logback的快速应用">xjsuntop.com/2018/10/14/logback/</a>
+            <span class="copy-path" data-clipboard-text="原文: xjsuntop.com/2018/10/14/logback/　　作者: xuejian.sun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/10/07/Centos7 下安装MySql 5.7+/">
+                    CentOs7下安装Mysql5.7+版本
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#java中如何使用logback"><span class="toc-number">1.</span> <span class="toc-text">java中如何使用logback</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日志级别"><span class="toc-number">2.</span> <span class="toc-text">日志级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appender级别"><span class="toc-number">3.</span> <span class="toc-text">Appender级别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ConsoleAppender-将日志输出到控制台"><span class="toc-number">3.1.</span> <span class="toc-text">ConsoleAppender (将日志输出到控制台)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FileAppender-将日志输出到文件中"><span class="toc-number">3.2.</span> <span class="toc-text">FileAppender(将日志输出到文件中)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RollingFileAppender-滚动式输出"><span class="toc-number">3.3.</span> <span class="toc-text">RollingFileAppender(滚动式输出)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#日志文件策略-Policy-常用"><span class="toc-number">4.</span> <span class="toc-text">日志文件策略 *Policy(常用)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TimeBasedRollingPolicy-按日期滚动策略"><span class="toc-number">4.1.</span> <span class="toc-text">TimeBasedRollingPolicy(按日期滚动策略)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SizeAndTimeBasedRollingPolicy-按大小和时间滚动策略"><span class="toc-number">4.2.</span> <span class="toc-text">SizeAndTimeBasedRollingPolicy(按大小和时间滚动策略)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FixedWindowRollingPolicy-以固定的算法策略生成滚动文件-不常用"><span class="toc-number">4.3.</span> <span class="toc-text">FixedWindowRollingPolicy(以固定的算法策略生成滚动文件 不常用)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SizeBasedTriggeringPolicy-根据大小触发滚动的策略"><span class="toc-number">4.4.</span> <span class="toc-text">SizeBasedTriggeringPolicy(根据大小触发滚动的策略)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fileNamePatten的一些规则-例子，按年，月，日，天，时，分，秒滚动"><span class="toc-number">5.</span> <span class="toc-text">fileNamePatten的一些规则(例子，按年，月，日，天，时，分，秒滚动)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#encoder规则-日志输出格式"><span class="toc-number">6.</span> <span class="toc-text">encoder规则(日志输出格式)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置："><span class="toc-number">6.1.</span> <span class="toc-text">配置：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#控制台输出："><span class="toc-number">6.2.</span> <span class="toc-text">控制台输出：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制台输出的log配置颜色"><span class="toc-number">7.</span> <span class="toc-text">控制台输出的log配置颜色</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子："><span class="toc-number">7.1.</span> <span class="toc-text">例子：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完整的logback-xml文件"><span class="toc-number">8.</span> <span class="toc-text">完整的logback.xml文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于日志定向输出和读取环境变量的问题"><span class="toc-number">9.</span> <span class="toc-text">关于日志定向输出和读取环境变量的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定向输出"><span class="toc-number">9.1.</span> <span class="toc-text">定向输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#logback-xml读取环境变量"><span class="toc-number">9.2.</span> <span class="toc-text">logback.xml读取环境变量</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"logback的快速应用　| blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/10/07/Centos7 下安装MySql 5.7+/" title="下一篇: CentOs7下安装Mysql5.7+版本">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/14/logback/">logback的快速应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/07/Centos7 下安装MySql 5.7+/">CentOs7下安装Mysql5.7+版本</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2018 xuejian.sun
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+             title: "a.article-title, .article-more-link a", 
+             post: ".article-entry a[href], .copyright a[href]", 
+             tags: ".article-tag a", 
+             categories: ".article-category a, a.tag-list-link", 
+             articleNav: "#article-nav a, #post-nav-button a", 
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+             menu: ".header-menu a", 
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
