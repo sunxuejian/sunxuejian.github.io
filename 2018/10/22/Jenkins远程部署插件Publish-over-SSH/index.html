@@ -15,20 +15,27 @@
 
 
 
-<meta name="description" content="2015.11.05来到上海的第一天，也是我进入java这个行业的第一天，写程序是个很奇妙的事情，能给我带来立竿见影的快乐，每解决一个问题，每做好一个功能，需要的时间不长，却能带来满满的成就感。这就是我选择这行的原因，也坚定了一条路走到黑的决心。目前一直从事着java后台和web开发，对规范化和自动化有较好的实践，比较喜欢的两个框架，netty和springboot。单身🐶一个，没有什么兴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于我">
-<meta property="og:url" content="xjsuntop.com/about/index.html">
+<meta name="description" content="publish over ssh是jenkins上一个插件,可以在jenkins系统管理-&amp;gt;插件管理-&amp;gt;可选插件中搜索到,然后安装,其主要的作用就是用于,远程登录到目标主机上.并且可以在目标主机上执行一些脚本.">
+<meta name="keywords" content="Jenkins,devOps,持续集成,远程部署">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins远程部署插件Publish-over-SSH">
+<meta property="og:url" content="xjsuntop.com/2018/10/22/Jenkins远程部署插件Publish-over-SSH/index.html">
 <meta property="og:site_name" content="blog">
-<meta property="og:description" content="2015.11.05来到上海的第一天，也是我进入java这个行业的第一天，写程序是个很奇妙的事情，能给我带来立竿见影的快乐，每解决一个问题，每做好一个功能，需要的时间不长，却能带来满满的成就感。这就是我选择这行的原因，也坚定了一条路走到黑的决心。目前一直从事着java后台和web开发，对规范化和自动化有较好的实践，比较喜欢的两个框架，netty和springboot。单身🐶一个，没有什么兴">
+<meta property="og:description" content="publish over ssh是jenkins上一个插件,可以在jenkins系统管理-&amp;gt;插件管理-&amp;gt;可选插件中搜索到,然后安装,其主要的作用就是用于,远程登录到目标主机上.并且可以在目标主机上执行一些脚本.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="xjsuntop.com/image/spiderMan.gif">
-<meta property="og:image" content="xjsuntop.com/image/wechar.jpg">
-<meta property="og:updated_time" content="2018-10-14T12:53:28.311Z">
+<meta property="og:image" content="/image/SSH_PUBLISH/jm.jpg">
+<meta property="og:image" content="/image/SSH_PUBLISH/jpm.jpg">
+<meta property="og:image" content="/image/SSH_PUBLISH/sp.jpg">
+<meta property="og:image" content="/image/SSH_PUBLISH/sshset.jpg">
+<meta property="og:image" content="/image/SSH_PUBLISH/test.jpg">
+<meta property="og:image" content="/image/SSH_PUBLISH/job1.png">
+<meta property="og:image" content="/image/SSH_PUBLISH/set.png">
+<meta property="og:image" content="/image/wechar.jpg">
+<meta property="og:updated_time" content="2018-10-22T12:51:54.360Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于我">
-<meta name="twitter:description" content="2015.11.05来到上海的第一天，也是我进入java这个行业的第一天，写程序是个很奇妙的事情，能给我带来立竿见影的快乐，每解决一个问题，每做好一个功能，需要的时间不长，却能带来满满的成就感。这就是我选择这行的原因，也坚定了一条路走到黑的决心。目前一直从事着java后台和web开发，对规范化和自动化有较好的实践，比较喜欢的两个框架，netty和springboot。单身🐶一个，没有什么兴">
-<meta name="twitter:image" content="xjsuntop.com/image/spiderMan.gif">
+<meta name="twitter:title" content="Jenkins远程部署插件Publish-over-SSH">
+<meta name="twitter:description" content="publish over ssh是jenkins上一个插件,可以在jenkins系统管理-&amp;gt;插件管理-&amp;gt;可选插件中搜索到,然后安装,其主要的作用就是用于,远程登录到目标主机上.并且可以在目标主机上执行一些脚本.">
+<meta name="twitter:image" content="/image/SSH_PUBLISH/jm.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -60,7 +67,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>关于我 | blog</title>
+<title>Jenkins远程部署插件Publish-over-SSH | blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -70,7 +77,7 @@
         fancybox: true,
         animate: true,
         isHome: false,
-        isPost: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -271,11 +278,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Jenkins远程部署插件Publish-over-SSH" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/about/index.html" class="article-date">
-      <time datetime="2018-10-07T11:42:27.000Z" itemprop="datePublished">2018-10-07</time>
+      <a href="/2018/10/22/Jenkins远程部署插件Publish-over-SSH/" class="article-date">
+      <time datetime="2018-10-22T12:47:25.000Z" itemprop="datePublished">2018-10-22</time>
 </a>
 
 
@@ -290,7 +297,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      关于我
+      Jenkins远程部署插件Publish-over-SSH
     </h1>
   
 
@@ -300,6 +307,10 @@
         
 
         
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins/">Jenkins</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/devOps/">devOps</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/持续集成/">持续集成</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/远程部署/">远程部署</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
       
@@ -307,45 +318,73 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <style>
-    .article-meta { display: none; }
-    #container .article .article-title { padding-right: 0; }
-    .article-header {
-        padding: 0;
-        padding-top: 26px;
-        border-left: none;
-        text-align: center;
-    }
-    .article-header:hover { border-left: none; }
-    .article-title { font-size: 1.6em }
-    .article-entry hr { margin: 0;}
-    .article-meta,
-    #container .article-info-post.article-info { display: none;}
-    #container .article .article-title { padding: 0; }
-</style>
-
-
-          
-        <p>   <strong><font color="red">2015.11.05来到上海的第一天，也是我进入java这个行业的第一天，写程序是个很奇妙的事情，能给我带来立竿见影的快乐，每解决一个问题，每做好一个功能，需要的时间不长，却能带来满满的成就感。这就是我选择这行的原因，也坚定了一条路走到黑的决心。目前一直从事着java后台和web开发，对规范化和自动化有较好的实践，比较喜欢的两个框架，netty和springboot。单身🐶一个，没有什么兴趣爱好，偶尔打游戏，业余喜欢了解一些其他编程语言，目前除java外，比较感兴趣的是python，kotlin,go,此站主要用于更新个人技术博客，和生活记录，不忘初心，砥砺前行</font></strong></p>
-  <center> <img src="../image/spiderMan.gif" alt="keep running"></center>
-
-<blockquote>
-<p>写博客的原因<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">之前一直在有道云笔记，印象笔记中记录自己的学习历程，决定将他们整合到一起；</span><br><span class="line">在github上共享了一些项目，缺少技术文档，决定在博客中介绍这些项目；</span><br><span class="line">督促自己学习，养成记录的习惯；</span><br><span class="line">希望将自己踩过的坑，写成文章给大家参考</span><br></pre></td></tr></table></figure></p>
+        <blockquote>
+<p>publish over ssh是jenkins上一个插件,可以在jenkins系统管理-&gt;插件管理-&gt;可选插件中搜索到,然后安装,其主要的作用就是用于,远程登录到目标主机上.并且可以在目标主机上执行一些脚本.</p>
+</blockquote>
+<a id="more"></a>
+<hr>
+<h1 id="如何做到远程持续集成"><a href="#如何做到远程持续集成" class="headerlink" title="如何做到远程持续集成."></a>如何做到远程持续集成.</h1><hr>
+<hr>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><blockquote>
+<p>我们的java项目在Jenkins上编译打包,可是我们想让Jenkins上打包出来的程序在另一台机器上执行,那么我们如何做到呢,首先你总得ssh到目标机器上,然后执行相应的脚本吧,所以我们用到了 <font color="red">publish over ssh</font> 我们需要在jenkins上安装这个插件.</p>
 </blockquote>
 <hr>
-<h4 id="一些快速使用的工具"><a href="#一些快速使用的工具" class="headerlink" title="一些快速使用的工具"></a>一些快速使用的工具</h4><blockquote>
+<h1 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h1><hr>
+<blockquote>
+<p>点击系统管理</p>
+</blockquote>
+<p><img src="/image/SSH_PUBLISH/jm.jpg" alt="系统管理"></p>
+<blockquote>
+<p>点击插件管理</p>
+</blockquote>
+<p><img src="/image/SSH_PUBLISH/jpm.jpg" alt="插件管理"></p>
+<blockquote>
+<p>搜索插件,并安装</p>
+</blockquote>
+<p><img src="/image/SSH_PUBLISH/sp.jpg" alt="install"></p>
+<blockquote>
+<p>下载好插件后,进入到系统管理中的系统设置中,然后往下拉,找到 Publish over SSH这一栏进行配置</p>
+</blockquote>
+<p><img src="/image/SSH_PUBLISH/sshset.jpg" alt="ssh配置"></p>
+<h2 id="如何生成ssh密匙"><a href="#如何生成ssh密匙" class="headerlink" title="如何生成ssh密匙"></a>如何生成ssh密匙</h2><blockquote>
+<p>如果需要jenkins远程登录到目标主机,需要在目标主机对应的用户下面生存ssh密匙</p>
+</blockquote>
 <ol>
-<li><a href="https://github.com/sunxuejian/Springboot-plugins/tree/master/db-manager" target="_blank" rel="noopener">数据库版本控制工具(Flyway)，支持程序升级(spring-boot),maven命令操作</a></li>
+<li>首先检查该用户有没有生成过ssh密匙</li>
 </ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#如果发现有存在 .ssh目录就不需要生成了,可以直接用</span></span><br><span class="line">ls -al ~/</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果不存在执行以下命令生成</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">"xxxx@email.com"</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>使用 ls -al ~/ 就能看到生成的ssh密匙了,将对应的目录配置到jenkins上就行了</li>
+</ol>
+<blockquote>
+<p>执行TestConfiguration测试ssh是否成功生效,如果不成功,请检查ssh配置是否有误(基本没有任何问题这一步)</p>
+</blockquote>
+<p><img src="/image/SSH_PUBLISH/test.jpg" alt="测试"></p>
+<blockquote>
+<p>到此安装和配置ssh结束,接下来要具体配置我们的jenkins job</p>
+</blockquote>
+<hr>
+<h1 id="Jenkins-Job中使用Publish-over-SSH"><a href="#Jenkins-Job中使用Publish-over-SSH" class="headerlink" title="Jenkins Job中使用Publish over SSH"></a>Jenkins Job中使用Publish over SSH</h1><hr>
+<ol>
+<li>点开你的jenkins job 拉倒构建后操作这一栏,选择我们安装好的publish over ssh</li>
+</ol>
+<p><img src="/image/SSH_PUBLISH/job1.png" alt="SSH配置"></p>
+<ol start="2">
+<li>配置说明</li>
+</ol>
+<p><img src="/image/SSH_PUBLISH/set.png" alt="SSH配置"></p>
+<p>到这所有的配置都结束了,非常简单,这个<font color="red">Transfer Set</font>可以配置很多个,非常灵活.<font color="red">Exec command<font> 执行块可以在文件上传后的一些操作.</font></font></p>
+<blockquote>
+<p><font color="red">注意:</font> Exec command这个里面所写的脚本一定要确保正常退出,不然jenkins会编译不过,可能引发超时,如果遇到该问题,请参考这篇文章:<a href="https://blog.csdn.net/u013066244/article/details/52788407" target="_blank" rel="noopener">Publish over SSH 超时问题</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p> <a href="https://github.com/sunxuejian/Springboot-plugins/tree/master/db-manager" target="_blank" rel="noopener">数据库版本控制工具(Flyway)，支持程序升级(spring-boot),maven命令操作</a></p>
 </blockquote>
 <blockquote>
-<ol start="2">
-<li><a href="https://github.com/sunxuejian/Springboot-plugins/tree/master/jersey-web" target="_blank" rel="noopener">spring-boot+jersey+swagger2例子,以完善打包部署功能，可使用内置的shell和bat脚本完成部署</a></li>
-</ol>
+<p>有什么疑问联系我：</p>
 </blockquote>
-<center><img src="../image/wechar.jpg" alt="Image 微信"></center>
-
-<center><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=5271400&auto=1&height=66"></iframe><br></center>
+<center><img src="/image/wechar.jpg" alt="Image 微信"></center>
 
       
     </div>
@@ -353,10 +392,59 @@
   </div>
   
     
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/10/22/Jenkins远程部署插件Publish-over-SSH/">Jenkins远程部署插件Publish-over-SSH</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">xuejian.sun</a></p>
+        <p><span>发布时间:</span>2018-10-22, 20:47:25</p>
+        <p><span>最后更新:</span>2018-10-22, 20:51:54</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/10/22/Jenkins远程部署插件Publish-over-SSH/" title="Jenkins远程部署插件Publish-over-SSH">xjsuntop.com/2018/10/22/Jenkins远程部署插件Publish-over-SSH/</a>
+            <span class="copy-path" data-clipboard-text="原文: xjsuntop.com/2018/10/22/Jenkins远程部署插件Publish-over-SSH/　　作者: xuejian.sun" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
 
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/10/21/如何在springboot容器启动后做些事情/">
+                    如何在springboot容器启动后做些事情
+                </a>
+            </div>
+        
+    </nav>
 
   
 </article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何做到远程持续集成"><span class="toc-number">1.</span> <span class="toc-text">如何做到远程持续集成.</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#场景"><span class="toc-number">1.1.</span> <span class="toc-text">场景</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装插件"><span class="toc-number">2.</span> <span class="toc-text">安装插件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何生成ssh密匙"><span class="toc-number">2.1.</span> <span class="toc-text">如何生成ssh密匙</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Jenkins-Job中使用Publish-over-SSH"><span class="toc-number">3.</span> <span class="toc-text">Jenkins Job中使用Publish over SSH</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
 
 
 
@@ -374,7 +462,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"关于我　| blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"Jenkins远程部署插件Publish-over-SSH　| blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -393,8 +481,8 @@
     <div id="disqus_thread"></div>
     <script>
         var disqus_config = function(){
-            this.page.url = 'xjsuntop.com/about/index.html';
-            this.page.identifier = 'about/index.html';
+            this.page.url = 'xjsuntop.com/2018/10/22/Jenkins远程部署插件Publish-over-SSH/';
+            this.page.identifier = '2018/10/22/Jenkins远程部署插件Publish-over-SSH/';
         };
         var loadComment = function(){
             var d = document, s = d.createElement('script');
@@ -411,6 +499,24 @@
 
     
 
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/10/21/如何在springboot容器启动后做些事情/" title="下一篇: 如何在springboot容器启动后做些事情">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/22/Jenkins远程部署插件Publish-over-SSH/">Jenkins远程部署插件Publish-over-SSH</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/21/如何在springboot容器启动后做些事情/">如何在springboot容器启动后做些事情</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/14/logback/">logback的快速应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/07/Centos7 下安装MySql 5.7+/">CentOs7下安装Mysql5.7+版本</a></li></ul>
 
 
 
