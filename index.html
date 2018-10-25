@@ -195,7 +195,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/">Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Springboot/">Springboot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/devOps/">devOps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logback/">logback</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/使用mysql/">使用mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/持续集成/">持续集成</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日志框架/">日志框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/远程部署/">远程部署</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bean初始化顺序/">Bean初始化顺序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/">Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/devOps/">devOps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logback/">logback</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/使用mysql/">使用mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/持续集成/">持续集成</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日志框架/">日志框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监听器/">监听器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/远程部署/">远程部署</a></li></ul>
                     </div>
                 </section>
                 
@@ -273,6 +273,79 @@
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-SpringBoot的事件和监听器" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/10/25/SpringBoot的事件和监听器/" class="article-date">
+      <time datetime="2018-10-25T13:54:23.000Z" itemprop="datePublished">2018-10-25</time>
+</a>
+
+ 
+    <a href="/2018/10/25/SpringBoot的事件和监听器/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/10/25/SpringBoot的事件和监听器/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/25/SpringBoot的事件和监听器/">SpringBoot的事件和监听器</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p>如果你很了解<code>SpringBoot</code>的事件和监听器,那么你就可以更灵活的在spring容器加载的过程中做一些定制化，这章的目的就是让我们更了解他的一个机制</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringBoot/">SpringBoot</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监听器/">监听器</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2018/10/25/SpringBoot的事件和监听器/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Jenkins远程部署插件Publish-over-SSH" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -387,7 +460,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-              <p>通常有些事情是需要在整个spring容器完全构建之后让程序自动调用处理，有些人喜欢用 <font color="red"> @PostConstruct </font> 来作为程序启动时加载我觉得是不合理的，在spring容器的装载过程如果出现了问题，我们需要适当的让他自己停止整个程序，而使用  <font color="red"> @PostConstruct </font> 有时候并不能带来好的效果，接下来我们举出几种方法，可以我们在整个spring容器正常构建完之后，做出一些我们自己的处理</p>
+              <p>通常有些事情是需要在整个spring容器完全构建之后让程序自动调用处理，有些人喜欢用 <font color="red"> <code>@PostConstruct</code> </font> 来作为程序启动时加载我觉得是不合理的，在spring容器的装载过程如果出现了问题，我们需要适当的让他自己停止整个程序，而使用  <font color="red"> <code>@PostConstruct</code> </font> 有时候并不能带来好的效果，接下来我们举出几种方法，可以我们在整个spring容器正常构建完之后，做出一些我们自己的处理</p>
           
       
     </div>
@@ -398,7 +471,7 @@
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Springboot/">Springboot</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bean初始化顺序/">Bean初始化顺序</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringBoot/">SpringBoot</a></li></ul>
     </div>
 
       
